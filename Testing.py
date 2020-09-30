@@ -7,6 +7,7 @@ basic_luc_skill = [0, 0, 0, 5, 0, 0, 10, 0, 0, 0, 10, 0, 0, 2, 5, 10, 0, 3, 5, 0
 char = ["Default", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  #Current character array
 #Basic Skills for Current Character Array and easier definitions
 basic_char_skill = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+"""
 Sart = char[7] + basic_char_skill[0]
 Sathletics = char[6] + basic_char_skill[1]
 Sbribery = char[10] + basic_char_skill[2]
@@ -33,6 +34,7 @@ Sperception = char[5] + basic_char_skill[22]
 Sride = char[6] + basic_char_skill[23]
 Srow = char[3] + basic_char_skill[24]
 Sstealth = char[6] + basic_char_skill[25]
+"""
 
 
 """
