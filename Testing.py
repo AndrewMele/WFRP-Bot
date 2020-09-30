@@ -1,7 +1,3 @@
-import random
-
-z = random.randrange(1,11) #just using this to represent inputs since I do not know how to do them yet
-
 natalia = ["Natalia", 24, 28]
 luci = ["Luci", 30, 20]
 
@@ -12,6 +8,7 @@ natalia[0] = "Character Name"
 natalia[1] = weaponskill
 natalia[2] = ballisticskill
 """
+
 
 
 
@@ -31,32 +28,29 @@ class Character():
 diz = Character(natalia[0], natalia[1], natalia[2])
 vent = Character(luci[0], luci[1], luci[2])
 
+def hub():
+    print("""What would you like to do today?
+    [C]hoose a Character
+    [Q]uit""")
+    
+    y = input()
+    if y == "C":
+        choose()
+    elif y == "Q":
+        print("Thank you!  Have a nice day!")
+    else:
+        hub()
+    
 
-if z <= 5:
-    diz.function()
+def choose():
+    print("""Which character would you like to play?
+    [1] Natalia
+    [2] Luci""")
+    x = input()
+    if x == "1":
+        diz.function()
+    elif x =="2":
+        vent.function()
+    hub()
 
-else:
-    vent.function()
-
-"""
-Dictionary Testing
-
-characters = {
-    "Natalia" : {
-        "WeaponSkill" : ws,
-        "BallisticSkill" : bs
-    },
-    "Luci" : {
-        "WeaponSkill" : ws,
-        "BallisticSkill" : bs
-    }
-}
-
-if z<= 5:
-    print("Natalia")
-    print(characters["Natalia"])
- 
-else
-    print("Luci")
-    print(characters["Luci"])
-"""
+hub()
