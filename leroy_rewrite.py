@@ -1,4 +1,3 @@
-'''
 
 import discord
 from discord.ext import commands
@@ -12,7 +11,7 @@ PREFIX = "l!"
 INSULT_PATH = "C:\\Users\\Drew\\Dropbox\\insults.txt"
 LOG_PATH = "C:\\Users\\Drew\\Dropbox\\leroy.log"
 
-#BOT_TOKEN = "NjU0MDY2NjA4NjA3NzIzNTcx.XfAJgQ.WUxUuPkLok1k6rmSDNcCVhraQmI"
+#BOT_TOKEN = "A BOT TOKEN"
 
 ROLE_ID = 617964909472514048 #Only people with this role or higher can use the bot
 
@@ -254,4 +253,3 @@ async def help(ctx):
 
 client.loop.create_task(ToggleStatus())
 client.run(BOT_TOKEN)
-'''
