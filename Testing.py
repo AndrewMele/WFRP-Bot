@@ -8,6 +8,11 @@ char = ["Default", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  #Current character array
 #Basic Skills for Current Character Array and easier definitions
 basic_char_skill = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 """
+Was going to do use these to replace putting in the code, but 
+it would return with only 0 each time.  Has to be a way to 
+update them once the numbers change
+
+
 Sart = char[7] + basic_char_skill[0]
 Sathletics = char[6] + basic_char_skill[1]
 Sbribery = char[10] + basic_char_skill[2]
@@ -78,7 +83,7 @@ class CharacterStats():
         char.append(self.willpower)
         char.append(self.fellowship)
 
-    def change(self):  #Changes Characteristics for the Selected Character. * WILL WORK ON MAKING IT CHANGE FOR BOTH ARRAYS *
+    def changestat(self):  #Changes Characteristics for the Selected Character. * WILL WORK ON MAKING IT CHANGE FOR BOTH ARRAYS *
         print("""Which characteristic would you like to replace?
         [WS]: Weapon Skill
         [BS: Ballistic Skill
@@ -153,56 +158,37 @@ class CharacterStats():
             x = input()
             char[10] = int(x)
         elif x == "ALL":
-            ws = ("""Current WS: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.weaponskill))
+            print("WS")
             a = input()
             char[1] = int(a)
-            bs = ("""Current BS: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.ballisticskill))
+            print("BS")
             b = input()
             char[2] = int(b)
-            s = ("""Current S: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.strength))
+            print("S")
             q = input()
             char[3] = int(q)
-            t = ("""Current T: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.toughness))
+            print("T")
             d = input()
             char[4] = int(d)
-            i = ("""Current I: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.initiative))
+            print("I")
             e = input()
             char[5] = int(e)
-            ag = ("""Current Ag: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.agility))
+            print("Ag")
             f = input()
             char[6] = int(f)
-            dex = ("""Current Dex: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.dexterity))
+            print("Dex")
             g = input()
             char[7] = int(g)
-            intel = ("""Current Int: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.intelligence))
+            print("Int")
             h = input()
             char[8] = int(h)
-            wp = ("""Current WP: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.willpower))
+            print("WP")
             j = input()
             char[9] = int(j)
-            fel = ("""Current Fel: {} 
-            what value would you like to replace it with?""")
-            print(ws.format(self.fellowship))
+            print("Fel")
             l = input()
             char[10] = int(l)
+
 
 class CharacterBasicSkills():
     def __init__(self, art, athletics, bribery, charm, charm_animal, climb, cool, consume_alcohol, dodge, drive, endurance, entertain, gamble, gossip, haggle, intimidate, intuition, leadership, melee_basic, melee_other, navigation, outdoor_survival, perception, ride, row, stealth):
@@ -288,7 +274,273 @@ class CharacterBasicSkills():
         basic_char_skill.append(self.ride)
         basic_char_skill.append(self.row)
         basic_char_skill.append(self.stealth)
-
+    
+    def changebskill(self):
+        print("""Which Basic Skill would you like to change?
+        [ART]: Art
+        [ATH]: Athletics
+        [BRI]: Bribery
+        [CHA]: Charm
+        [ANI]: Charm Animal
+        [CLI]: Climb
+        [COO]: Cool
+        [CON]: Consume Alcohol
+        [DOD]: Dodge
+        [DRI]: Drive
+        [END]: Endurance
+        [ENT]: Entertain
+        [GAM]: Gamble
+        [GOS]: Gossip
+        [HAG]: Haggle
+        [TIM]: Intimidate
+        [TUI]: Intuition
+        [LEA]: Leadership
+        [MEB]: Melee(Basic)
+        [MEO]: Melee(Other)
+        [NAV]: Navigation
+        [ODS]: Outdoor Survival
+        [PER]: Perception
+        [RID]: Ride
+        [ROW]: Row
+        [STE]: Stealth
+        [ALL]: All""")
+        x=input().upper()
+        if x == "ART":
+            ar = ("""Current Art: {}
+            What value would you like to replace it with?""")
+            print(ar.format(self.art))
+            x = input()
+            basic_char_skill[0] = int(x)
+        elif x == "ATH":
+            at = ("""Current Athletics: {}
+            What value would you like to replace it with?""")
+            print(at.format(self.athletics))
+            x = input()
+            basic_char_skill[1] = int(x)
+        elif x == "BRI":
+            br = ("""Current Bribery: {}
+            What value would you like to replace it with?""")
+            print(br.format(self.bribery))
+            x = input()
+            basic_char_skill[2] = int(x)
+        elif x == "CHA":
+            ch = ("""Current Charm: {}
+            What value would you like to replace it with?""")
+            print(ch.format(self.art))
+            x = input()
+            basic_char_skill[3] = int(x)
+        elif x == "ANI":
+            ca = ("""Current Charm Animal: {}
+            What value would you like to replace it with?""")
+            print(ca.format(self.charm_animal))
+            x = input()
+            basic_char_skill[4] = int(x)
+        elif x == "CLI":
+            cl = ("""Current Climb: {}
+            What value would you like to replace it with?""")
+            print(cl.format(self.climb))
+            x = input()
+            basic_char_skill[5] = int(x)
+        elif x == "COO":
+            co = ("""Current Cool: {}
+            What value would you like to replace it with?""")
+            print(co.format(self.cool))
+            x = input()
+            basic_char_skill[6] = int(x)
+        elif x == "CON":
+            cn = ("""Current Consume Alcohol: {}
+            What value would you like to replace it with?""")
+            print(cn.format(self.consume_alcohol))
+            x = input()
+            basic_char_skill[7] = int(x)
+        elif x == "DOD":
+            do = ("""Current Dodge: {}
+            What value would you like to replace it with?""")
+            print(do.format(self.dodge))
+            x = input()
+            basic_char_skill[8] = int(x)
+        elif x == "DRI":
+            dr = ("""Current Drive: {}
+            What value would you like to replace it with?""")
+            print(dr.format(self.drive))
+            x = input()
+            basic_char_skill[9] = int(x)
+        elif x == "END":
+            ed = ("""Current Endurance: {}
+            What value would you like to replace it with?""")
+            print(ed.format(self.endurance))
+            x = input()
+            basic_char_skill[10] = int(x)
+        elif x == "ENT":
+            et = ("""Current Entertain: {}
+            What value would you like to replace it with?""")
+            print(et.format(self.entertain))
+            x = input()
+            basic_char_skill[11] = int(x)
+        elif x == "GAM":
+            ga = ("""Current Gamble: {}
+            What value would you like to replace it with?""")
+            print(ga.format(self.gamble))
+            x = input()
+            basic_char_skill[12] = int(x)
+        elif x == "GOS":
+            go = ("""Current Gossip: {}
+            What value would you like to replace it with?""")
+            print(go.format(self.gossip))
+            x = input()
+            basic_char_skill[13] = int(x)
+        elif x == "HAG":
+            ha = ("""Current Haggle: {}
+            What value would you like to replace it with?""")
+            print(ha.format(self.haggle))
+            x = input()
+            basic_char_skill[14] = int(x)
+        elif x == "TIM":
+            ti = ("""Current Intimidate: {}
+            What value would you like to replace it with?""")
+            print(ti.format(self.intimidate))
+            x = input()
+            basic_char_skill[15] = int(x)
+        elif x == "TUI":
+            tu = ("""Current Intuition: {}
+            What value would you like to replace it with?""")
+            print(tu.format(self.intuition))
+            x = input()
+            basic_char_skill[16] = int(x)
+        elif x == "LEA":
+            le = ("""Current Leadership: {}
+            What value would you like to replace it with?""")
+            print(le.format(self.leadership))
+            x = input()
+            basic_char_skill[17] = int(x)
+        elif x == "MEB":
+            mb = ("""Current Melee(Basic): {}
+            What value would you like to replace it with?""")
+            print(mb.format(self.melee_basic))
+            x = input()
+            basic_char_skill[18] = int(x)
+        elif x == "MEO":
+            mo = ("""Current Melee(Other): {}
+            What value would you like to replace it with?""")
+            print(mo.format(self.melee_other))
+            x = input()
+            basic_char_skill[19] = int(x)
+        elif x == "NAV":
+            na = ("""Current Navigation: {}
+            What value would you like to replace it with?""")
+            print(na.format(self.navigation))
+            x = input()
+            basic_char_skill[20] = int(x)
+        elif x == "ODS":
+            od = ("""Current Outdoor Survival: {}
+            What value would you like to replace it with?""")
+            print(od.format(self.outdoor_survival))
+            x = input()
+            basic_char_skill[21] = int(x)
+        elif x == "PER":
+            pe = ("""Current Perception: {}
+            What value would you like to replace it with?""")
+            print(pe.format(self.perception))
+            x = input()
+            basic_char_skill[22] = int(x)
+        elif x == "RID":
+            ri = ("""Current Ride: {}
+            What value would you like to replace it with?""")
+            print(ri.format(self.ride))
+            x = input()
+            basic_char_skill[23] = int(x)
+        elif x == "ROW":
+            ro = ("""Current Row: {}
+            What value would you like to replace it with?""")
+            print(ro.format(self.row))
+            x = input()
+            basic_char_skill[24] = int(x)
+        elif x == "STE":
+            st = ("""Current Stealth: {}
+            What value would you like to replace it with?""")
+            print(st.format(self.stealth))
+            x = input()
+            basic_char_skill[25] = int(x)
+        elif x == "ALL":
+            print("Art")
+            x0 = input()
+            basic_char_skill[0] = int(x0)
+            print("Athletics")
+            x1 = input()
+            basic_char_skill[1] = int(x1)
+            print("Bribery")
+            x2 = input()
+            basic_char_skill[2] = int(x2)
+            print("Charm")
+            x3 = input()
+            basic_char_skill[3] = int(x3)
+            print("Charm Animal")
+            x4 = input()
+            basic_char_skill[4] = int(x4)
+            print("Climb")
+            x5 = input()
+            basic_char_skill[5] = int(x5)
+            print("Cool")
+            x6 = input()
+            basic_char_skill[6] = int(x6)
+            print("Consume Alcohol")
+            x7 = input()
+            basic_char_skill[7] = int(x7)
+            print("Dodge")
+            x8 = input()
+            basic_char_skill[8] = int(x8)
+            print("Drive")
+            x9 = input()
+            basic_char_skill[9] = int(x9)
+            print("Endurance")
+            x10 = input()
+            basic_char_skill[10] = int(x10)
+            print("Entertain")
+            x11 = input()
+            basic_char_skill[11] = int(x11)
+            print("Gamble")
+            x12 = input()
+            basic_char_skill[12] = int(x12)
+            print("Gossip")
+            x13 = input()
+            basic_char_skill[13] = int(x13)
+            print("Haggle")
+            x14 = input()
+            basic_char_skill[14] = int(x14)
+            print("Intimidate")
+            x15 = input()
+            basic_char_skill[15] = int(x15)
+            print("Intuition")
+            x16 = input()
+            basic_char_skill[16] = int(x16)
+            print("Leadership")
+            x17 = input()
+            basic_char_skill[17] = int(x17)
+            print("Melee(Basic)")
+            x18 = input()
+            basic_char_skill[18] = int(x18)
+            print("Melee(Other)")
+            x19 = input()
+            basic_char_skill[19] = int(x19)
+            print("Navigation")
+            x20 = input()
+            basic_char_skill[20] = int(x20)
+            print("Outdoor Survival")
+            x21 = input()
+            basic_char_skill[21] = int(x21)
+            print("Perception")
+            x22 = input()
+            basic_char_skill[22] = int(x22)
+            print("Ride")
+            x23 = input()
+            basic_char_skill[23] = int(x23)
+            print("Row")
+            x24 = input()
+            basic_char_skill[24] = int(x24)
+            print("Stealth")
+            x25 = input()
+            basic_char_skill[25] = int(x25)
+            
 
 def meleeroll(): #Will do a basic WeaponSkill roll for the selected character
     z = random.randrange(1, 101)
@@ -302,8 +554,6 @@ def meleeroll(): #Will do a basic WeaponSkill roll for the selected character
         hit = ("You Miss by {} SLs!")
         print(hit.format(sl))
 
-    
-
 
 diz = CharacterStats(natalia[0], natalia[1], natalia[2], natalia[3], natalia[4], natalia[5], natalia[6], natalia[7], natalia[8], natalia[9], natalia[10])
 dizbskills = CharacterBasicSkills(basic_nat_skill[0], basic_nat_skill[1], basic_nat_skill[2], basic_nat_skill[3], basic_nat_skill[4], basic_nat_skill[5], basic_nat_skill[6], basic_nat_skill[7], basic_nat_skill[8], basic_nat_skill[9], basic_nat_skill[10], basic_nat_skill[11], basic_nat_skill[12], basic_nat_skill[13], basic_nat_skill[14], basic_nat_skill[15], basic_nat_skill[16], basic_nat_skill[17], basic_nat_skill[18], basic_nat_skill[19], basic_nat_skill[20], basic_nat_skill[21], basic_nat_skill[22], basic_nat_skill[23], basic_nat_skill[24], basic_nat_skill[25])
@@ -313,18 +563,24 @@ ventbskills = CharacterBasicSkills(basic_luc_skill[0], basic_luc_skill[1], basic
 
 def hub():
     print("""What would you like to do today?
-    [C]hoose a Character
-    [R]eplace characteristics/stats
-    [H]it roll
+    [C]: Choose a Character
+    [RC]: Replace characteristics/stats
+    [RB]: Replace Basic Skills
+    [M]: Melee roll
     [Q]uit""")
     
     x = input().upper()
     if x == "C":
         choose()
-    elif x == "R":
+    elif x == "RC":
         c = CharacterStats(char[0], char[1], char[2], char[3], char[4], char[5], char[6], char[7],char[8],char[9],char[10])
-        c.change()
-    elif x == "H":
+        c.changestat()
+        hub()
+    elif x =="RB":
+        cbs = CharacterBasicSkills(basic_char_skill[0], basic_char_skill[1], basic_char_skill[2], basic_char_skill[3], basic_char_skill[4], basic_char_skill[5], basic_char_skill[6], basic_char_skill[7], basic_char_skill[8], basic_char_skill[9], basic_char_skill[10], basic_char_skill[11], basic_char_skill[12], basic_char_skill[13], basic_char_skill[14], basic_char_skill[15], basic_char_skill[16], basic_char_skill[17], basic_char_skill[18], basic_char_skill[19], basic_char_skill[20], basic_char_skill[21], basic_char_skill[22], basic_char_skill[23], basic_char_skill[24], basic_char_skill[25])
+        cbs.changebskill()
+        hub()
+    elif x == "M":
         meleeroll()
         hub()
     elif x == "Q":
