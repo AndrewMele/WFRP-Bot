@@ -7,6 +7,9 @@ import re
 import logging
 
 
+LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
+#BOT_TOKEN = NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.Ikc-mP9HKa9smVSaTEb6uFN4a-Q
+
 PREFIX = "WF!"
 
 #Setup Logging
@@ -15,3 +18,4 @@ logging.getLogger().addHandler(logging.StreamHandler())
 
 client = commands.Bot(command_prefix = PREFIX)
 client.remove_command('help')
+
