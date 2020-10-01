@@ -1,3 +1,5 @@
+'''
+
 import discord
 from discord.ext import commands
 import os
@@ -252,3 +254,4 @@ async def help(ctx):
 
 client.loop.create_task(ToggleStatus())
 client.run(BOT_TOKEN)
+'''
