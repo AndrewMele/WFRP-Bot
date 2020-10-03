@@ -1,4 +1,5 @@
 import random
+import crittable
 
 natalia = ["Natalia", 33, 33, 29, 29, 23, 32, 30, 33, 30, 44]
 basic_nat_skill = [0, 0, 5, 6, 0, 0, 3, 5, 0, 0, 0, 0, 5, 10, 10, 10, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0]
@@ -484,16 +485,22 @@ def showcurrent():
     """)
     
 def meleeroll(): #Will do a basic WeaponSkill roll for the selected character
-    z = random.randrange(1, 101)
+    z = random.randrange(1, 101) 
     meleebasic = char[1] + basic_char_skill[18]
     sl = (meleebasic - z)/10
     print(f"You rolled {z}.")
-    if z <= (meleebasic):
+    if z <= (meleebasic): 
         print(f"You Hit by {sl} SLs!")
+        if (crittable.checkcritical(z)):
+            print("You Crit!  They suffer: ")
+            crittable.crit()
     else:
         print(f"You Miss by {sl} SLs!")
+        if (crittable.checkcritical(z)):
+            print("You Crit Failed!")
 
-    
+
+
 
 diz = CharacterStats(natalia[0], natalia[1], natalia[2], natalia[3], natalia[4], natalia[5], natalia[6], natalia[7], natalia[8], natalia[9], natalia[10])
 dizbskills = CharacterBasicSkills(basic_nat_skill[0], basic_nat_skill[1], basic_nat_skill[2], basic_nat_skill[3], basic_nat_skill[4], basic_nat_skill[5], basic_nat_skill[6], basic_nat_skill[7], basic_nat_skill[8], basic_nat_skill[9], basic_nat_skill[10], basic_nat_skill[11], basic_nat_skill[12], basic_nat_skill[13], basic_nat_skill[14], basic_nat_skill[15], basic_nat_skill[16], basic_nat_skill[17], basic_nat_skill[18], basic_nat_skill[19], basic_nat_skill[20], basic_nat_skill[21], basic_nat_skill[22], basic_nat_skill[23], basic_nat_skill[24], basic_nat_skill[25])
