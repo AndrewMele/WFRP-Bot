@@ -553,4 +553,4 @@ def choose(): #Choose which character to play.  Will be replaced with checking t
         ventbskills.function()
     hub()
 
-hub()
+#hub()
