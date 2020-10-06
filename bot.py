@@ -9,7 +9,7 @@ import crittable
 
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.MnnMcIWtdtVbD7NQUL11W9zqFUE"
+BOT_TOKEN = ""
 
 #ROLE_ID = 761293063238582322
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
