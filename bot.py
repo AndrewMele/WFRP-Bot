@@ -9,7 +9,7 @@ import crittable
 
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = ""
+BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.MnnMcIWtdtVbD7NQUL11W9zqFUE"
 
 #ROLE_ID = 761293063238582322
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
@@ -35,37 +35,70 @@ async def on_ready():
     logging.info(msg + " Bot is ready")
 
 
-"""@client.command()
-async def mroll(ctx):
+@client.command(aliases = ["r"])
+async def roll(ctx):
     await ctx.message.delete()
-    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Melee(Basic)?")
-    embed.add_field(name="Yes",value="[Y]")
-    embed.add_field(name="No",value="[N]")
+    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to roll for Melee, Ranged, or a Skill?")
+    embed.add_field(name="Melee",value="[1]")
+    embed.add_field(name="Ranged",value="[2]")
+    embed.add_field(name="Skill",value="[3]")
     await ctx.send(embed=embed)
-                        #This is the part that is messing up.  Need to find a way to include choosing which skill they would want to use in case they want to use a different Melee or Dodge
-                        #Would need to have an input/ctx.message reader that would accept their choice and then do the meleeroll function.
-    await ctx.message()
-    if ctx.message() == "Y" or ctx.message() == "Yes":
-        await ctx.message.delete()
-        meleeroll()
-    else:
-        await ctx.message.delete()
-"""
+    channel = ctx.message.channel
+    def check(m):
+        return (m.content == "1" or m.content == "2" or m.content == "3") and m.channel == channel
+    response = await client.wait_for('message', check=check)
+    if response.content == "1":
+        await meleeroll(ctx)
+    elif response.content == "2":
+        await ctx.send("Doesn't exist yet LOL")
+    elif response.content == "3":
+        await ctx.send("Coming Soon")
+    await response.delete()
+        
+    
+@client.command()
+async def clear(ctx, number):
+    number = int(number)+1 #Converting the amount of messages to delete to an integer
+    msgs = []
+    async for msg in ctx.message.channel.history(limit = number):
+        msgs.append(msg)
+    await ctx.message.channel.delete_messages(msgs)
 
-@client.command(aliases=["mroll"])
+@client.command(aliases = ["mr"])
 async def meleeroll(ctx):
-    await ctx.message.delete()
+    try:
+        await ctx.message.delete()
+    except:
+        print("Message already deleted.")
     rp = random.randrange(1, 101) 
     ro = random.randrange(1, 101)
     pmeleebasic = 35 #Replace Later on to read actual character sheet info
-    pdodge = 25
+    pmeleebrawl = 25
     omeleebasic = 20
-    ododge = 30
-    psl = (pmeleebasic - rp)/10
+    omeleebrawl = 30
+    ododge = 40
+    pskill = 0
+    oskill = 0
+    
+    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Melee(Basic) or Melee(Brawl)?")
+    embed.add_field(name="Melee(Basic)",value="[1]")
+    embed.add_field(name="Melee(Brawl)",value="[2]")
+    await ctx.send(embed=embed)
+    channel = ctx.message.channel
+    def check(m):
+        return (m.content == "1" or m.content == "2") and m.channel == channel
+    response = await client.wait_for('message', check=check)
+    if response.content == "1":
+        pskill = pmeleebasic
+    elif response.content == "2":
+        pskill = pmeleebrawl
+
+    psl = (pskill - rp)/10
     osl = (omeleebasic - ro)/10
+
     embed = discord.Embed(colour = discord.Colour.dark_purple(),title = f"Melee Roll for {ctx.author.name}")
     embed.add_field(name="Roll", value=f"{rp}")
-    if rp <= pmeleebasic: 
+    if rp <= pskill: 
         embed.add_field(name="Success Levels", value=f"{psl}")
         if crittable.checkcritical(rp):
             embed.add_field(name= "Crit", value ="You Crit!")
@@ -73,7 +106,7 @@ async def meleeroll(ctx):
             embed.add_field(name="Crit Location", value = temp_crit, inline=False)
             if temp_crit != "":
                 embed.add_field(name = "They Suffer:", value = crittable.doescritical(temp_crit), inline=False)
-    elif rp >= pmeleebasic:
+    elif rp >= pskill:
         embed.add_field(name = "Success Levels", value=f"{psl} SLs")
         if crittable.checkcritical(rp):
             embed.add_field(name="Crit", value="You Crit Failed!")
