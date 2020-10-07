@@ -50,9 +50,9 @@ async def roll(ctx):
     if response.content == "1":
         await meleeroll(ctx)
     elif response.content == "2":
-        await ctx.send("Doesn't exist yet LOL")
+        await rangedroll(ctx)
     elif response.content == "3":
-        await ctx.send("Coming Soon")
+        await skillroll(ctx)
     await response.delete()
         
     
