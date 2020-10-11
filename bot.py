@@ -4,8 +4,11 @@ import os
 import asyncio
 import random
 import logging
-import Testing
 import crittable
+import PyPDF2
+
+f = PyPDF2.PdfFileReader('C:\\Users\\Arthur\\Desktop\\Maptools\\Tokens\\WFRP Characters\\Luci Whisper (Vent)\\Luci Character Sheet.pdf')
+ff = f.getFields()
 
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
@@ -71,9 +74,9 @@ async def skillroll(ctx):
     except:
         print("Message already deleted.")
     rp = random.randrange(1, 101)
-    pathletics = 30
-    pcool = 40
-    pcharm = 50
+    pathletics = (int(ff['AgCurrent'].value) + int(ff['AdvAg'].value))
+    pcool = (int(ff['WPCurrent'].value) + int(ff['AdvWP_2'].value))
+    pcharm = (int(ff['FelCurrent'].value) + int(ff['AdvFel_4'].value))
     pskill = 0
 
     embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Athletics, Cool, or Charm?")
