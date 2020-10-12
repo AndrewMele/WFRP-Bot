@@ -7,12 +7,12 @@ import logging
 import crittable
 import PyPDF2
 
-f = PyPDF2.PdfFileReader('C:\\Users\\Arthur\\Desktop\\Maptools\\Tokens\\WFRP Characters\\Luci Whisper (Vent)\\Luci Character Sheet.pdf')
+f = PyPDF2.PdfFileReader('C:\\Users\\Arthur\\Desktop\\Maptools\\Tokens\\WFRP Characters\\Luci Whisper (Vent)\\new_Luci_Character_Sheet.pdf')
 ff = f.getFields()
 value_field = {}
 
 for x in ff:
-    if ff[x].value == None:
+    if ff[x].value == '':
         value_field[ff[x].name] = 0
     else:
         value_field[ff[x].name] = ff[x].value
@@ -81,9 +81,9 @@ async def skillroll(ctx):
     except:
         print("Message already deleted.")
     rp = random.randrange(1, 101)
-    pathletics = (int(value_field['AgCurrent'].value) + int(value_field['AthleticsAdvances'].value))
-    pcool = (int(value_field['WPCurrent'].value) + int(value_field['CoolAdvances'].value))
-    pcharm = (int(value_field['FelCurrent'].value) + int(value_field['CharmAdvances'].value))
+    pathletics = (int(value_field.get("AgCurrent")) + int(value_field.get("AthleticsAdvances")))
+    pcool = (int(value_field.get("WPCurrent")) + int(value_field.get("CoolAdvances")))
+    pcharm = (int(value_field.get("FelCurrent")) + int(value_field.get("CharmAdvances")))
     pskill = 0
 
     embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Athletics, Cool, or Charm?")
@@ -121,8 +121,8 @@ async def meleeroll(ctx):
         print("Message already deleted.")
     rp = random.randrange(1, 101) 
     ro = random.randrange(1, 101)
-    pmeleebasic = 35 #Replace Later on to read actual character sheet info
-    pmeleebrawl = 25
+    pmeleebasic = (int(value_field.get("WSCurrent")) + int(value_field.get("MeleeBasicAdvances")))
+    pmeleebrawl = (int(value_field.get("WSCurrent")) + int(value_field.get("MeleeOtherAdvances")))
     omeleebasic = 20
     omeleebrawl = 30
     ododge = 40
@@ -176,9 +176,9 @@ async def rangedroll(ctx):
         print("Message already deleted.")
     rp = random.randrange(1, 101) 
     ro = random.randrange(1, 101)
-    prangedbow = 35 #Replace Later on to read actual character sheet info
-    prangedsling = 25
-    ododge = 40
+    prangedbow = (int(value_field.get("BSCurrent")))
+    prangedsling = (int(value_field.get("BSCurrent")))
+    ododge = 30
     pskill = 0
     oskill = 0
     
