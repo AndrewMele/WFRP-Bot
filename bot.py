@@ -9,6 +9,13 @@ import PyPDF2
 
 f = PyPDF2.PdfFileReader('C:\\Users\\Arthur\\Desktop\\Maptools\\Tokens\\WFRP Characters\\Luci Whisper (Vent)\\Luci Character Sheet.pdf')
 ff = f.getFields()
+value_field = {}
+
+for x in ff:
+    if ff[x].value == None:
+        value_field[ff[x].name] = 0
+    else:
+        value_field[ff[x].name] = ff[x].value
 
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
@@ -74,9 +81,9 @@ async def skillroll(ctx):
     except:
         print("Message already deleted.")
     rp = random.randrange(1, 101)
-    pathletics = (int(ff['AgCurrent'].value) + int(ff['AdvAg'].value))
-    pcool = (int(ff['WPCurrent'].value) + int(ff['AdvWP_2'].value))
-    pcharm = (int(ff['FelCurrent'].value) + int(ff['AdvFel_4'].value))
+    pathletics = (int(value_field['AgCurrent'].value) + int(value_field['AthleticsAdvances'].value))
+    pcool = (int(value_field['WPCurrent'].value) + int(value_field['CoolAdvances'].value))
+    pcharm = (int(value_field['FelCurrent'].value) + int(value_field['CharmAdvances'].value))
     pskill = 0
 
     embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Athletics, Cool, or Charm?")
