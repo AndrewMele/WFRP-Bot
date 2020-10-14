@@ -12,25 +12,26 @@ ff = f.getFields()
 value_field = {}
 skilladv_value = {}
 
-advances_deletion_for_skills = ["WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
+advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
 
 
 for x in ff:
-    if ff[x].value == '':
+    if ff[x].value == '' or ff[x].value == None:
         value_field[ff[x].name] = 0
     else:
         value_field[ff[x].name] = ff[x].value
 
 for x in value_field:
 
-    if x.endswith("Advances"):
+    if x.find("Adv") != -1:
         skilladv_value[f"{x}"] = value_field.get(x)
         if x in advances_deletion_for_skills:
             skilladv_value.popitem()
 
 
+
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.bLnshrs5KjB7dHdnRbIb4OlmT-I"
+BOT_TOKEN = ""
 
 #ROLE_ID = 761293063238582322
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
