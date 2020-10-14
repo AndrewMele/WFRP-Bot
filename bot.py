@@ -31,7 +31,7 @@ for x in value_field:
 
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = ""
+BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.a4lLWPF9uO3kOqLCJ8d8nzcvNBA"
 
 #ROLE_ID = 761293063238582322
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
@@ -76,6 +76,35 @@ async def roll(ctx):
     elif response.content == "3":
         await skillroll(ctx)
     await response.delete()
+
+
+@client.command()
+async def addskill(ctx):
+    await ctx.message.delete()
+    channel = ctx.message.channel
+    await ctx.send("What is the skill called?")
+    response = await client.wait_for('message')
+    x = response.content
+    await ctx.send("How many Advances (Adv) do you have in this skill?")
+    response = await client.wait_for('message')
+    y = response.content
+    
+    embed = discord.Embed(colour=discord.Colour.dark_purple(),title=f"You have {y} Advances in {x}.  Is that correct?")
+    embed.add_field(name="Yes",value="[1]")
+    embed.add_field(name="No",value="[2]")
+    await ctx.send(embed=embed)
+    def check(m):
+        return (m.content == "1" or m.content == "2") and m.channel == channel
+    response = await client.wait_for('message', check=check)
+    if response.content == "1":
+        skilladv_value[f"{x}"] = f"{y}"
+        await response.delete()
+        await clear(ctx, 5)
+    elif response.content == "2":
+        await response.delete()
+        await clear(ctx, 5)
+    
+    
         
     
 @client.command()
