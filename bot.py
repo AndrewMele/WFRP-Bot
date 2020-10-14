@@ -7,9 +7,13 @@ import logging
 import crittable
 import PyPDF2
 
-f = PyPDF2.PdfFileReader('C:\\Users\\Arthur\\Desktop\\Maptools\\Tokens\\WFRP Characters\\Luci Whisper (Vent)\\new_Luci_Character_Sheet.pdf')
+f = PyPDF2.PdfFileReader("C:/Users/Arthur/Desktop/Maptools/Tokens/WFRP Characters/Luci Whisper (Vent)/new_Luci_Character_Sheet.pdf")
 ff = f.getFields()
 value_field = {}
+skilladv_value = {}
+
+advances_deletion_for_skills = ["WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
+
 
 for x in ff:
     if ff[x].value == '':
@@ -17,9 +21,16 @@ for x in ff:
     else:
         value_field[ff[x].name] = ff[x].value
 
+for x in value_field:
+
+    if x.endswith("Advances"):
+        skilladv_value[f"{x}"] = value_field.get(x)
+        if x in advances_deletion_for_skills:
+            skilladv_value.popitem()
+
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = ""
+BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.bLnshrs5KjB7dHdnRbIb4OlmT-I"
 
 #ROLE_ID = 761293063238582322
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
