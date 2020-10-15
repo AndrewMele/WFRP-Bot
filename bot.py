@@ -7,27 +7,6 @@ import logging
 import crittable
 import PyPDF2
 
-f = PyPDF2.PdfFileReader("C:/Users/Arthur/Desktop/Maptools/Tokens/WFRP Characters/Luci Whisper (Vent)/new_Luci_Character_Sheet.pdf")
-ff = f.getFields()
-value_field = {}
-skilladv_value = {}
-
-advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
-
-
-for x in ff:
-    if ff[x].value == '' or ff[x].value == None:
-        value_field[ff[x].name] = 0
-    else:
-        value_field[ff[x].name] = ff[x].value
-
-for x in value_field:
-
-    if x.find("Adv") != -1:
-        skilladv_value[f"{x}"] = value_field.get(x)
-        if x in advances_deletion_for_skills:
-            skilladv_value.popitem()
-
 
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
@@ -46,6 +25,93 @@ logging.getLogger().addHandler(logging.StreamHandler())
 client = commands.Bot(command_prefix = PREFIX)
 client.remove_command('help')
 
+character_profiles = {"Natalia Luck" : "C:/Users/Arthur/Desktop/Maptools/Tokens/WFRP Characters/Natalia Luck (Diz)/New Natalia Luck (Diz).pdf", "Luci Whisper" : "C:/Users/Arthur/Desktop/Maptools/Tokens/WFRP Characters/Luci Whisper (Vent)/new_Luci_Character_Sheet.pdf"}
+character_name_list = ["Natalia Luck", "Luci Whisper"]
+value_field = {}
+skilladv_value = {}
+advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
+
+
+@client.command(aliases = ["sc"])
+async def selectcharacter(ctx):
+    await ctx.message.delete()
+    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Which Character Sheet would you like to use?")
+    y=1
+    for x in character_name_list:
+        embed.add_field(name = f"{x}", value = f"[{y}]")
+        if y <= len(character_name_list):
+            y=y+1
+    embed.add_field(name = "New Character", value = f"[{y}]")
+    await ctx.send(embed=embed)
+    channel = ctx.message.channel
+    response = await client.wait_for('message')
+    z = response.content
+    value_field.clear()
+    skilladv_value.clear()
+
+    if z == "1":
+        try:
+            characterpdf = character_profiles.get(character_name_list[0])
+        except:
+            await newcharacter(ctx)
+            characterpdf = character_profiles.get(character_name_list[0])
+    elif z == "2":
+        try:
+            characterpdf = character_profiles.get(character_name_list[1])
+        except:
+            await newcharacter(ctx)
+            characterpdf = character_profiles.get(character_name_list[1])
+    elif z == "3":
+        try:
+            characterpdf = character_profiles.get(character_name_list[2])
+        except:
+            await newcharacter(ctx)
+            characterpdf = character_profiles.get(character_name_list[2])
+    elif z == "4":
+        try:
+            characterpdf = character_profiles.get(character_name_list[3])
+        except:
+            await newcharacter(ctx)
+            characterpdf = character_profiles.get(character_name_list[3])
+    elif z == "5":
+        try:
+            characterpdf = character_profiles.get(character_name_list[4])
+        except:
+            await newcharacter(ctx)
+            characterpdf = character_profiles.get(character_name_list[4])
+    else:
+        print("What did you say?  Let's redo this.")
+        selectcharacter()
+    
+    
+    f = PyPDF2.PdfFileReader(characterpdf)
+    ff = f.getFields()
+
+    for x in ff:
+        if ff[x].value == '' or ff[x].value == None:
+            value_field[ff[x].name] = 0
+        else:
+            value_field[ff[x].name] = ff[x].value
+
+    for x in value_field:
+
+        if x.find("Adv") != -1:
+            skilladv_value[f"{x}"] = value_field.get(x)
+            if x in advances_deletion_for_skills:
+                skilladv_value.popitem()
+
+@client.command(aliases = ["nc"])
+async def newcharacter(ctx):
+    await ctx.send("What is the name of your character?")
+    channel = ctx.message.channel
+    response = await client.wait_for('message')
+    charactername = response.content
+    await ctx.send("Please link the location of your pdf.")
+    response = await client.wait_for('message')
+    characterlocation = response.content
+    character_name_list.append(f"{charactername}")
+    character_profiles[f"{charactername}"] = f"{characterlocation}"
+    clear(ctx, 4)
 
 
 @client.event
