@@ -6,18 +6,19 @@ import random
 import logging
 import crittable
 import PyPDF2
+import time
 
 character_profiles = {"Natalia Luck" : "C:/Users/Arthur/Desktop/Maptools/Tokens/WFRP Characters/Natalia Luck (Diz)/New Natalia Luck (Diz).pdf", "Luci Whisper" : "C:/Users/Arthur/Desktop/Maptools/Tokens/WFRP Characters/Luci Whisper (Vent)/new_Luci_Character_Sheet.pdf"}
 character_name_list = ["Natalia Luck", "Luci Whisper"]
 value_field = {}
 skilladv_value = {}
 advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
-
+pc = {}
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = ""
+BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.xSZ7ROmvbDyhT1gcMzxcqeG_lWU"
 
-#ROLE_ID = 761293063238582322
+ROLE_ID = 767048275906789388
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
 #Bot's name is RENALD
 PREFIX = "r!"
@@ -30,6 +31,32 @@ logging.getLogger().addHandler(logging.StreamHandler())
 client = commands.Bot(command_prefix = PREFIX)
 client.remove_command('help')
 
+
+async def playercharacterstatus(ctx):
+    if ctx.guild.get_role(ROLE_ID) in ctx.author.roles:
+        try:
+
+            characterpdf = pc.get(ctx.author.id)
+            f = PyPDF2.PdfFileReader(characterpdf)
+            ff = f.getFields()
+
+            for x in ff:
+                if ff[x].value == '' or ff[x].value == None:
+                    value_field[ff[x].name] = 0
+                else:
+                    value_field[ff[x].name] = ff[x].value
+
+            for x in value_field:
+                if x.find("Adv") != -1:
+                    skilladv_value[f"{x}"] = value_field.get(x)
+                    if x in advances_deletion_for_skills:
+                        skilladv_value.popitem()
+        except:
+            await ctx.send("Sorry, you do not have a character selected.  Let me help you with that.")
+            time.sleep(1)
+            await selectcharacter(ctx)
+
+
 @client.event
 async def on_ready():
     logging.info(f"Logged in as: {client.user.name}")
@@ -40,7 +67,10 @@ async def on_ready():
 
 @client.command(aliases = ["sc"])
 async def selectcharacter(ctx):
-    await ctx.message.delete()
+    try: 
+        await ctx.message.delete()
+    except:
+        logging.info("Message already deleted.")
     embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Which Character Sheet would you like to use?")
     y=0
     for x in character_name_list:  #Goes through all the known characters and adds them to the embed.
@@ -57,9 +87,13 @@ async def selectcharacter(ctx):
     #Reads your response and selects the character to apply to all of the skills.  If your selection did not exist or you selected New Character, it should create a new character for you.
     try:
         characterpdf = character_profiles.get(character_name_list[int(z)])
+        pc[ctx.author.id] = character_profiles.get(character_name_list[int(z)])
+        logging.info(f"{ctx.author.name} selected {character_name_list[int(z)]} as their character.")
     except:
         await newcharacter(ctx)
         characterpdf = character_profiles.get(character_name_list[int(z)])
+        pc[ctx.author.id] = character_profiles.get(character_name_list[int(z)])
+        logging.info(f"{ctx.author.name} selected {character_name_list[int(z)]} as their character.")
         await ctx.send(f"Your new character {character_name_list[int(z)]} has been created and selected.")
     
     f = PyPDF2.PdfFileReader(characterpdf)
@@ -89,11 +123,16 @@ async def newcharacter(ctx):
     characterlocation = response.content
     character_name_list.append(f"{charactername}")
     character_profiles[f"{charactername}"] = f"{characterlocation}"
+    logging.info(f"{ctx.author.name} has created the {charactername} Character")
     await clear(ctx, 4)
 
 @client.command(aliases = ["r"])
 async def roll(ctx):
-    await ctx.message.delete()
+    await playercharacterstatus(ctx)
+    try: 
+        await ctx.message.delete()
+    except:
+        logging.info("Message already deleted.")
     embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to roll for Melee, Ranged, or a Skill?")
     embed.add_field(name="Melee",value="[1]")
     embed.add_field(name="Ranged",value="[2]")
@@ -114,7 +153,11 @@ async def roll(ctx):
 
 @client.command()
 async def addskill(ctx):
-    await ctx.message.delete()
+    await playercharacterstatus(ctx)
+    try: 
+        await ctx.message.delete()
+    except:
+        logging.info("Message already deleted.")
     channel = ctx.message.channel
     await ctx.send("What is the skill called?")
     response = await client.wait_for('message')
@@ -138,23 +181,14 @@ async def addskill(ctx):
         await response.delete()
         await clear(ctx, 5)
     
-    
-        
-    
-@client.command()
-async def clear(ctx, number):
-    number = int(number)+1 #Converting the amount of messages to delete to an integer
-    msgs = []
-    async for msg in ctx.message.channel.history(limit = number):
-        msgs.append(msg)
-    await ctx.message.channel.delete_messages(msgs)
 
 @client.command(aliases=["sr"])
 async def skillroll(ctx):
+    await playercharacterstatus(ctx)
     try:
         await ctx.message.delete()
     except:
-        print("Message already deleted.")
+        logging.info("Message already deleted.")
     rp = random.randrange(1, 101)
     pathletics = (int(value_field.get("AgCurrent")) + int(value_field.get("AthleticsAdvances")))
     pcool = (int(value_field.get("WPCurrent")) + int(value_field.get("CoolAdvances")))
@@ -190,10 +224,11 @@ async def skillroll(ctx):
 
 @client.command(aliases = ["mr"])
 async def meleeroll(ctx):
+    await playercharacterstatus(ctx)
     try:
         await ctx.message.delete()
     except:
-        print("Message already deleted.")
+        logging.info("Message already deleted.")
     rp = random.randrange(1, 101) 
     ro = random.randrange(1, 101)
     pmeleebasic = (int(value_field.get("WSCurrent")) + int(value_field.get("MeleeBasicAdvances")))
@@ -236,19 +271,22 @@ async def meleeroll(ctx):
             embed.add_field(name="Crit", value="You Crit Failed!")
 
     if psl >= osl and crittable.checkcritical(rp) == False:
+        embed.add_field(name= "Opponent's SL", value = f"{osl} SLs")
         embed.add_field(name= "Hit Status", value = "You Hit The Opponent",inline = False)#Make sure to put opponent name in {}
             #^^Calculate Damage from STR/10, SL, and weapon damage vs opponent's toughness and armour.^^
     elif psl <= osl and crittable.checkcritical(rp) == False:
+        embed.add_field(name= "Opponent's SL", value = f"{osl} SLs")
         embed.add_field(name= "Hit Status", value = "The Opponent Dodged/Parried", inline = False)#Make sure to put opponent name in {}
    
     await ctx.send(embed=embed)
 
 @client.command(aliases = ["rr"])
 async def rangedroll(ctx):
+    await playercharacterstatus(ctx)
     try:
         await ctx.message.delete()
     except:
-        print("Message already deleted.")
+        logging.info("Message already deleted.")
     rp = random.randrange(1, 101) 
     ro = random.randrange(1, 101)
     prangedbow = (int(value_field.get("BSCurrent")))
@@ -297,6 +335,15 @@ async def rangedroll(ctx):
     await ctx.send(embed=embed)
 
 @client.command()
+async def clear(ctx, number):
+    number = int(number)+1 #Converting the amount of messages to delete to an integer
+    msgs = []
+    async for msg in ctx.message.channel.history(limit = number):
+        msgs.append(msg)
+    await ctx.message.channel.delete_messages(msgs)
+
+
+@client.command()
 async def help(ctx):
     logging.info(f"Displaying help information to {ctx.author.name}")
     embed = discord.Embed(colour = discord.Color.dark_purple())
@@ -308,4 +355,6 @@ async def help(ctx):
     await ctx.message.delete()
     await ctx.channel.send(embed=embed)
 
+
+ 
 client.run(BOT_TOKEN)
