@@ -17,7 +17,7 @@ pc = {}
 
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.SDS2rlG-Uym8d2bP1bU082AIT40"
+BOT_TOKEN = ""
 
 
 ROLE_ID = 767048275906789388
