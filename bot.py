@@ -18,7 +18,7 @@ pc = {}
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
 BOT_TOKEN = ""
-
+#being funky, so adding this comment so that the github lords are happy
 
 ROLE_ID = 767048275906789388
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
