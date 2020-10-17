@@ -16,7 +16,7 @@ advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", 
 pc = {}
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.xSZ7ROmvbDyhT1gcMzxcqeG_lWU"
+BOT_TOKEN = ""
 
 ROLE_ID = 767048275906789388
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
