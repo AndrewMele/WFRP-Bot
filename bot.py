@@ -15,8 +15,10 @@ skilladv_value = {}
 advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
 pc = {}
 
+
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = ""
+BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.SDS2rlG-Uym8d2bP1bU082AIT40"
+
 
 ROLE_ID = 767048275906789388
 #^ This is to the new Bot Testing Server.  Only people with this role can use the bot.
@@ -35,7 +37,6 @@ client.remove_command('help')
 async def playercharacterstatus(ctx):
     if ctx.guild.get_role(ROLE_ID) in ctx.author.roles:
         try:
-
             characterpdf = pc.get(ctx.author.id)
             f = PyPDF2.PdfFileReader(characterpdf)
             ff = f.getFields()
@@ -51,6 +52,21 @@ async def playercharacterstatus(ctx):
                     skilladv_value[f"{x}"] = value_field.get(x)
                     if x in advances_deletion_for_skills:
                         skilladv_value.popitem()
+                    elif x.find("AdvRow") != -1:
+                        skilladv_value.popitem()
+                elif x.find("SkillNameRow") != -1:
+                    #if value from SkillNameRow# has Melee in it, create new key using SkillNameRow#'s value as the key and AdvRow1 as the value
+                    if value_field.get(x) != 0:
+                        name = value_field.get(x)
+                if x.find("AdvRow") != -1:
+                    if value_field.get(x) != 0:
+                        value = value_field.get(x)
+                try:        
+                    skilladv_value[f"{name}"] =f"{value}"
+                    del name
+                    del value
+                except:
+                    pass
         except:
             await ctx.send("Sorry, you do not have a character selected.  Let me help you with that.")
             time.sleep(1)
@@ -240,6 +256,7 @@ async def meleeroll(ctx):
     oskill = 0
     
     embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Melee (Basic) or Melee (Brawl)?")
+    
     embed.add_field(name="Melee (Basic)",value="[1]")
     embed.add_field(name="Melee (Brawl)",value="[2]")
     await ctx.send(embed=embed)
