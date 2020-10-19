@@ -12,10 +12,50 @@ character_profiles = {"Natalia Luck" : "C:/Users/Arthur/Desktop/Maptools/Tokens/
 character_name_list = ["Natalia Luck", "Luci Whisper"]
 value_field = {}
 skilladv_value = {}
-advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
 pc = {}
+skillcharacteristics = {
+    "ArtAdvances" : "DexCurrent",
+    "AthleticsAdvances" : "AgCurrent",
+    "BriberyAdvances" : "FelCurrent",
+    "CharmAdvances": "FelCurrent",
+    "ClimbAdvances": "SCurrent",
+    "CoolAdvances" : "WPCurrent",
+    "ConsumeAlcoholAdvances" : "TCurrent",
+    "DodgeAdvances" : "AgCurrent",
+    "DriveAdvances" : "AgCurrent",
+    "EnduranceAdvances" : "TCurrent",
+    "EntertainAdvances" : "FelCurrent",
+    "GambleAdvances" : "IntCurrent",
+    "GossipAdvances" : "FelCurrent",
+    "HaggleAdvances" : "FelCurrent",
+    "IntimidateAdvances" : "SCurrent",
+    "IntuitionAdvances" : "ICurrent",
+    "LeadershipAdvances" : "FelCurrent",
+    "NavigationAdvances" : "ICurrent",
+    "OutdoorSurvivalAdvances" : "IntCurrent",
+    "PerceptionAdvances" : "ICurrent",
+    "RideAdvances" : "AgCurrent",
+    "RowAdvances" : "SCurrent",
+    "StealthAdvances" : "AgCurrent"
+}
+changecharname = {
+    "WS" : "WSCurrent",
+    "BS" : "BSCurrent",
+    "S" : "SCurrent",
+    "T" : "TCurrent",
+    "I" : "ICurrent",
+    "Ag" : "AgCurrent",
+    "Dex" : "DexCurrent",
+    "Int" : "IntCurrent",
+    "WP" : "WPCurrent",
+    "Fel" : "FelCurrent"
+}
 
-
+advances_deletion_for_skills = ["CurrentAdvantage", "WSAdvances", "BSAdvances", "SAdvances", "TAdvances", "IAdvances", "AgAdvances", "DexAdvances", "IntAdvances", "WPAdvances", "FelAdvances"]
+no_combat_skill_name_list = []
+melee_skill_name_list = []
+ranged_skill_name_list = []
+fields = []
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
 BOT_TOKEN = ""
 #being funky, so adding this comment so that the github lords are happy
@@ -33,44 +73,72 @@ logging.getLogger().addHandler(logging.StreamHandler())
 client = commands.Bot(command_prefix = PREFIX)
 client.remove_command('help')
 
-
 async def playercharacterstatus(ctx):
     if ctx.guild.get_role(ROLE_ID) in ctx.author.roles:
         try:
             characterpdf = pc.get(ctx.author.id)
             f = PyPDF2.PdfFileReader(characterpdf)
             ff = f.getFields()
-
+    
             for x in ff:
+                #fields.append(ff[x])  Another way of making value_field
                 if ff[x].value == '' or ff[x].value == None:
                     value_field[ff[x].name] = 0
                 else:
                     value_field[ff[x].name] = ff[x].value
 
             for x in value_field:
-                if x.find("Adv") != -1:
-                    skilladv_value[f"{x}"] = value_field.get(x)
-                    if x in advances_deletion_for_skills:
-                        skilladv_value.popitem()
-                    elif x.find("AdvRow") != -1:
-                        skilladv_value.popitem()
-                elif x.find("SkillNameRow") != -1:
-                    #if value from SkillNameRow# has Melee in it, create new key using SkillNameRow#'s value as the key and AdvRow1 as the value
-                    if value_field.get(x) != 0:
-                        name = value_field.get(x)
-                if x.find("AdvRow") != -1:
-                    if value_field.get(x) != 0:
-                        value = value_field.get(x)
+
+                if x.find("Adv") != -1:  #If x has 'Adv' within its name
+                    skilladv_value[f"{x}"] = value_field.get(x)  #Add it to skilladv_value with its value
+                    no_combat_skill_name_list.append(f"{x}") #Add it to no_combat_skill_name_list
+                    if x in advances_deletion_for_skills: #if x with 'Adv' is from a characteristic instead of a skill
+                        skilladv_value.popitem() 
+                        no_combat_skill_name_list.pop() 
+                    elif x.find("AdvRow") != -1: #if x with 'Adv' has 'AdvRow' in it
+                        skilladv_value.popitem()  
+                        no_combat_skill_name_list.pop()
+                    elif x.find("Melee") != -1: #if x has 'Melee' or 'Ranged' within its name
+                        no_combat_skill_name_list.pop()
+                        melee_skill_name_list.append(f"{x}")
+                    elif x.find("Ranged") != -1:
+                        no_combat_skill_name_list.pop()
+                        ranged_skill_name_list.append(f"{x}")
+               
+
+                if x.find("SkillNameRow") != -1 and value_field.get(x) != 0: #if x has 'SkillNameRow' in its name and has an actual string value
+                    name = value_field.get(x)
+                elif x.find("CharacteristicRow") != -1 and x.find("_") == -1 and value_field.get(x) in changecharname: #if x has 'CharacteristicsRow' in its name, doesn't have a '_', and is in changecharname
+                    charname = changecharname.get(value_field.get(x))
+                elif x.find("AdvRow") != -1 and value_field.get(x) != 0: #if x has 'AdvRow' in its name and has an actual int value
+                    value = value_field.get(x)
+                
+                
+
                 try:        
-                    skilladv_value[f"{name}"] =f"{value}"
+                    skilladv_value[f"{name}"] =f"{value}"  #create new skill from the string value of 'SkillNameRow' and the int value of 'AdvRow' and place it into skilladv_value dictionary
+                    no_combat_skill_name_list.append(f"{name}") #Place the name of this new skill into no_combat_skill_name_list
+                    skillcharacteristics[f"{name}"] = f"{charname}"
+                    if name.find("Melee") != -1:  #if the new skill has 'Melee' or 'Ranged' within its name
+                        no_combat_skill_name_list.pop()
+                        skillcharacteristics.popitem()
+                        melee_skill_name_list.append(f"{name}")
+                    elif name.find("Ranged") != -1:
+                        no_combat_skill_name_list.pop()
+                        skillcharacteristics.popitem()
+                        ranged_skill_name_list.append(f"{x}")
                     del name
                     del value
+                    del charname
                 except:
                     pass
+            
         except:
             await ctx.send("Sorry, you do not have a character selected.  Let me help you with that.")
             time.sleep(1)
             await selectcharacter(ctx)
+
+
 
 
 @client.event
@@ -112,21 +180,7 @@ async def selectcharacter(ctx):
         logging.info(f"{ctx.author.name} selected {character_name_list[int(z)]} as their character.")
         await ctx.send(f"Your new character {character_name_list[int(z)]} has been created and selected.")
     
-    f = PyPDF2.PdfFileReader(characterpdf)
-    ff = f.getFields()
-
-    for x in ff:
-        if ff[x].value == '' or ff[x].value == None:
-            value_field[ff[x].name] = 0
-        else:
-            value_field[ff[x].name] = ff[x].value
-
-    for x in value_field:
-
-        if x.find("Adv") != -1:
-            skilladv_value[f"{x}"] = value_field.get(x)
-            if x in advances_deletion_for_skills:
-                skilladv_value.popitem()
+    await playercharacterstatus(ctx)
 
 @client.command(aliases = ["nc"])
 async def newcharacter(ctx):
@@ -206,28 +260,27 @@ async def skillroll(ctx):
     except:
         logging.info("Message already deleted.")
     rp = random.randrange(1, 101)
-    pathletics = (int(value_field.get("AgCurrent")) + int(value_field.get("AthleticsAdvances")))
-    pcool = (int(value_field.get("WPCurrent")) + int(value_field.get("CoolAdvances")))
-    pcharm = (int(value_field.get("FelCurrent")) + int(value_field.get("CharmAdvances")))
     pskill = 0
 
-    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Athletics, Cool, or Charm?")
-    embed.add_field(name="Athletics",value="[1]")
-    embed.add_field(name="Cool",value="[2]")
-    embed.add_field(name="Charm",value="[3]")
-    await ctx.send(embed=embed)
-    channel=ctx.message.channel
-    def check(m):
-        return (m.content == "1" or m.content == "2" or m.content == "3") and m.channel == channel
-    response = await client.wait_for('message', check=check)
-    if response.content == "1":
-        pskill = pathletics
-    elif response.content == "2":
-        pskill = pcool
-    elif response.content == "3":
-        pskill = pcharm
+    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Which skill would you like to use?")
     
-    psl = (pskill -rp)/10
+    y=0
+    for x in no_combat_skill_name_list:  #get all the names of the skills in no_combat_skill_name_list
+            embed.add_field(name = f"{x}", value = f"[{y}]")
+            if y <= len(no_combat_skill_name_list):
+                y=y+1
+
+    
+    await ctx.send(embed=embed)
+    channel = ctx.message.channel
+    response = await client.wait_for('message')
+    z = response.content
+    try: 
+        pskill = int(skilladv_value.get(no_combat_skill_name_list[int(z)])) + int(value_field.get(skillcharacteristics.get(no_combat_skill_name_list[int(z)]))) #search through skilladv_value for the value that matches the no_combat_skill_name_list skill name
+    except:
+        await ctx.send("I am sorry, this should not happen.  My coding is horendous and I am a horrible person HELP ME SIGMAR AAAAAAAAH!")
+    
+    psl = (pskill - rp)/10
 
     embed = discord.Embed(colour = discord.Colour.dark_purple(),title = f"Skill Roll for {ctx.author.name}")
     embed.add_field(name="Roll", value=f"{rp}")
@@ -247,28 +300,29 @@ async def meleeroll(ctx):
         logging.info("Message already deleted.")
     rp = random.randrange(1, 101) 
     ro = random.randrange(1, 101)
-    pmeleebasic = (int(value_field.get("WSCurrent")) + int(value_field.get("MeleeBasicAdvances")))
-    pmeleebrawl = (int(value_field.get("WSCurrent")) + int(value_field.get("MeleeOtherAdvances")))
     omeleebasic = 20
     omeleebrawl = 30
     ododge = 40
     pskill = 0
     oskill = 0
     
-    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Melee (Basic) or Melee (Brawl)?")
-    
-    embed.add_field(name="Melee (Basic)",value="[1]")
-    embed.add_field(name="Melee (Brawl)",value="[2]")
+    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Which Melee would you like to use?")
+
+    y=0
+    for x in melee_skill_name_list:  #get all the names of the skills in no_combat_skill_name_list
+            embed.add_field(name = f"{x}", value = f"[{y}]")
+            if y <= len(melee_skill_name_list):
+                y=y+1
+
     await ctx.send(embed=embed)
     channel = ctx.message.channel
-    def check(m):
-        return (m.content == "1" or m.content == "2") and m.channel == channel
-    response = await client.wait_for('message', check=check)
-    if response.content == "1":
-        pskill = pmeleebasic
-    elif response.content == "2":
-        pskill = pmeleebrawl
-
+    response = await client.wait_for('message')
+    z = response.content
+    try: 
+        pskill = int(skilladv_value.get(melee_skill_name_list[int(z)])) + int(value_field.get("WSCurrent")) #search through skilladv_value for the value that matches the no_combat_skill_name_list skill name
+    except:
+        await ctx.send("I am sorry, this should not happen.  My coding is horendous and I am a horrible person HELP ME SIGMAR AAAAAAAAH!")
+    
     psl = (pskill - rp)/10
     osl = (omeleebasic - ro)/10
 
@@ -306,24 +360,25 @@ async def rangedroll(ctx):
         logging.info("Message already deleted.")
     rp = random.randrange(1, 101) 
     ro = random.randrange(1, 101)
-    prangedbow = (int(value_field.get("BSCurrent")))
-    prangedsling = (int(value_field.get("BSCurrent")))
     ododge = 30
     pskill = 0
     oskill = 0
     
-    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Would you like to use Ranged (Bow) or Ranged (Sling)?")
-    embed.add_field(name="Ranged (Bow)",value="[1]")
-    embed.add_field(name="Ranged (Sling)",value="[2]")
+    embed = discord.Embed(colour=discord.Colour.dark_purple(),title="Which Ranged would you like to use?")
+    y=0
+    for x in ranged_skill_name_list:  #get all the names of the skills in no_combat_skill_name_list
+            embed.add_field(name = f"{x}", value = f"[{y}]")
+            if y <= len(ranged_skill_name_list):
+                y=y+1
+    embed.add_field(name = "Pure BS", value = f"[{y}]")
     await ctx.send(embed=embed)
     channel = ctx.message.channel
-    def check(m):
-        return (m.content == "1" or m.content == "2") and m.channel == channel
-    response = await client.wait_for('message', check=check)
-    if response.content == "1":
-        pskill = prangedbow
-    elif response.content == "2":
-        pskill = prangedsling
+    response = await client.wait_for('message')
+    z = response.content
+    try: 
+        pskill = int(skilladv_value.get(ranged_skill_name_list[int(z)])) + int(value_field.get("BSCurrent")) #search through skilladv_value for the value that matches the no_combat_skill_name_list skill name
+    except:
+        pskill = int(value_field.get("BSCurrent"))
 
     psl = (pskill - rp)/10
     osl = (ododge - ro)/10
