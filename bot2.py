@@ -61,7 +61,7 @@ changecharname = {
 }
 
 LOG_PATH = "C:\\Users\\Arthur\\OneDrive\\WFRPTestingbot.log"
-BOT_TOKEN = "NzYxMjc4MzU3ODcwMzQ2MzAw.X3YRuA.zsEucSa0Z7r5ySN6SjeY9Da4yfQ"
+BOT_TOKEN = ""
 #being funky, so adding this comment so that the github lords are happy
 
 ROLE_ID = 767048275906789388
@@ -346,7 +346,7 @@ async def rangedroll(ctx):
     psl = (pskill - rp)/10
     osl = (ododge - ro)/10
     time.sleep(1)
-    
+
     embed = discord.Embed(colour = discord.Colour.dark_purple(),title = f"{z} Roll for {ctx.author.name}")
     embed.add_field(name="Roll", value=f"{rp}")
     if rp <= pskill: 
